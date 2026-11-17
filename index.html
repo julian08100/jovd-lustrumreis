@@ -198,7 +198,7 @@ section.block{padding-top:60px}.clues,.days{grid-template-columns:1fr}
   <div class="facts">
     <div class="fact"><b>4</b><span>dagen, do t/m zo</span></div>
     <div class="fact"><b>3</b><span>nachten, samen onder één dak</span></div>
-    <div class="fact"><b>±2u</b><span>vliegen vanuit de buurt</span></div>
+    <div class="fact"><b>55</b><span>jaar Hart van Brabant</span></div>
     <div class="fact"><b id="countdown">…</b><span>dagen tot vertrek</span></div>
   </div>
   <a class="mobile-cta" href="#aanmelden">Meld je aan ↓</a>
@@ -274,7 +274,7 @@ section.block{padding-top:60px}.clues,.days{grid-template-columns:1fr}
           <div class="ff"><select id="ff-program" name="ffProgram" aria-label="Loyaliteitsprogramma" required><option value="">Programma…</option><option>Flying Blue (KLM/Air France)</option><option>Miles &amp; More (Lufthansa/Eurowings)</option><option>Wizz Air</option><option>Transavia</option><option>Anders</option></select>
           <input id="ff-number" name="ffNumber" required maxlength="40" autocomplete="off" placeholder="Je nummer" aria-describedby="ff-hint"></div>
           <p id="ff-hint" class="hint">Verplicht. Heb je er nog geen? Maak gratis een account aan, bijvoorbeeld bij Flying Blue of Miles &amp; More.</p></div>
-        <div class="field"><label for="member">Lid van de JOVD?</label><select id="member" name="member" required><option value="">Kies…</option><option>Ja</option><option>Nee, nog niet</option></select></div>
+        <div class="field"><label for="birthdate">Geboortedatum</label><input id="birthdate" name="birthdate" type="date" required min="1930-01-01" max="2012-12-31" autocomplete="bday"></div>
         <div class="field"><label for="guess">Jouw gok <span class="opt">(optioneel)</span></label><input id="guess" name="guess" maxlength="60" placeholder="Waar gaan we heen?"></div>
         <div class="field full"><label for="notes">Dieetwensen of opmerkingen <span class="opt">(optioneel)</span></label><textarea id="notes" name="notes" maxlength="500"></textarea></div>
       </div>
@@ -285,7 +285,7 @@ section.block{padding-top:60px}.clues,.days{grid-template-columns:1fr}
       <p id="compose-status" role="status" aria-live="polite"></p>
     </form>
     <div class="fallback">Liever zelf mailen? <a href="mailto:secretaris@jovdhartvanbrabant.nl?subject=Aanmelding%20lustrumreis">secretaris@jovdhartvanbrabant.nl</a></div>
-    <noscript><p>Vermeld in je mail je voor- en achternaam (zoals in je paspoort), telefoonnummer, e-mailadres, frequent-flyernummer en of je lid bent van de JOVD.</p></noscript>
+    <noscript><p>Vermeld in je mail je voor- en achternaam (zoals in je paspoort), telefoonnummer, e-mailadres, geboortedatum en frequent-flyernummer.</p></noscript>
   </section>
 </section>
 </main>
@@ -346,7 +346,7 @@ form.addEventListener('submit',ev=>{
   const name=clean(d.firstName)+' '+clean(d.lastName);
   const body=['Beste secretaris,','','Ik meld me graag aan voor de lustrumreis van 29 april t/m 2 mei 2027.','',
     'Voornaam: '+clean(d.firstName),'Achternaam: '+clean(d.lastName),'Telefoonnummer: '+normalizePhone(clean(d.phone)),'E-mailadres: '+clean(d.email),
-    'Frequent-flyerprogramma: '+clean(d.ffProgram),'Frequent-flyernummer: '+clean(d.ffNumber),'Lid van de JOVD: '+clean(d.member),
+    'Frequent-flyerprogramma: '+clean(d.ffProgram),'Frequent-flyernummer: '+clean(d.ffNumber),'Geboortedatum: '+(d.birthdate?d.birthdate.split('-').reverse().join('-'):''),
     'Geldig paspoort/ID tot na 2 mei 2027: ja','Dieetwensen/opmerkingen: '+(clean(d.notes)||'-'),'Mijn gok voor de bestemming: '+(clean(d.guess)||'-'),
     '','Met vriendelijke groet,',name].join('\r\n');
   const url='mailto:secretaris@jovdhartvanbrabant.nl?subject='+encodeURIComponent('Aanmelding lustrumreis — '+name)+'&body='+encodeURIComponent(body);
