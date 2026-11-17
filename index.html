@@ -270,10 +270,10 @@ section.block{padding-top:60px}.clues,.days{grid-template-columns:1fr}
         <div class="field"><label for="last-name">Achternaam <span class="opt">(zoals in je paspoort)</span></label><input id="last-name" name="lastName" autocomplete="family-name" required maxlength="120"></div>
         <div class="field full"><label for="phone">Telefoonnummer</label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="24" placeholder="06 1234 5678 of +32 470 12 34 56"></div>
         <div class="field full"><label for="email">E-mailadres</label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" placeholder="jij@voorbeeld.nl"></div>
-        <div class="field full"><label for="ff-number">Frequent-flyernummer</label>
-          <div class="ff"><select id="ff-program" name="ffProgram" aria-label="Loyaliteitsprogramma" required><option value="">Programma…</option><option>Flying Blue (KLM/Air France)</option><option>Miles &amp; More (Lufthansa/Eurowings)</option><option>Wizz Air</option><option>Transavia</option><option>Anders</option></select>
-          <input id="ff-number" name="ffNumber" required maxlength="40" autocomplete="off" placeholder="Je nummer" aria-describedby="ff-hint"></div>
-          <p id="ff-hint" class="hint">Verplicht. Heb je er nog geen? Maak gratis een account aan, bijvoorbeeld bij Flying Blue of Miles &amp; More.</p></div>
+        <div class="field full"><label for="ff-number">Frequent-flyernummer <span class="opt">(optioneel)</span></label>
+          <div class="ff"><select id="ff-program" name="ffProgram" aria-label="Loyaliteitsprogramma"><option value="">Programma…</option><option>Flying Blue (KLM/Air France)</option><option>Miles &amp; More (Lufthansa/Eurowings)</option><option>Wizz Air</option><option>Transavia</option><option>Anders</option></select>
+          <input id="ff-number" name="ffNumber" maxlength="40" autocomplete="off" placeholder="Je nummer" aria-describedby="ff-hint"></div>
+          <p id="ff-hint" class="hint">Heb je er een? Vul hem in, dan sparen je miles mee.</p></div>
         <div class="field"><label for="birthdate">Geboortedatum</label><input id="birthdate" name="birthdate" type="date" required min="1930-01-01" max="2012-12-31" autocomplete="bday"></div>
         <div class="field"><label for="guess">Jouw gok <span class="opt">(optioneel)</span></label><input id="guess" name="guess" maxlength="60" placeholder="Waar gaan we heen?"></div>
         <div class="field full"><label for="bag">Bagage</label><select id="bag" name="bag" required aria-describedby="bag-hint"><option value="">Kies…</option><option value="Alleen een tasje (inbegrepen)">Alleen een tasje (inbegrepen)</option><option value="Handbagagekoffertje (tegen toeslag)">Handbagagekoffertje (tegen toeslag)</option><option value="Ruimbagage (tegen toeslag)">Ruimbagage (tegen toeslag)</option></select><p id="bag-hint" class="hint">Inbegrepen is één tasje dat onder je stoel past. Een koffertje of ruimbagage kan tegen toeslag; het bedrag hoor je later.</p></div>
@@ -286,7 +286,7 @@ section.block{padding-top:60px}.clues,.days{grid-template-columns:1fr}
       <p id="compose-status" role="status" aria-live="polite"></p>
     </form>
     <div class="fallback">Liever zelf mailen? <a href="mailto:secretaris@jovdhartvanbrabant.nl?subject=Aanmelding%20lustrumreis">secretaris@jovdhartvanbrabant.nl</a></div>
-    <noscript><p>Vermeld in je mail je voor- en achternaam (zoals in je paspoort), telefoonnummer, e-mailadres, geboortedatum, frequent-flyernummer en of je een koffertje of ruimbagage wilt (tegen toeslag).</p></noscript>
+    <noscript><p>Vermeld in je mail je voor- en achternaam (zoals in je paspoort), telefoonnummer, e-mailadres, geboortedatum, eventueel je frequent-flyernummer en of je een koffertje of ruimbagage wilt (tegen toeslag).</p></noscript>
   </section>
 </section>
 </main>
@@ -341,13 +341,13 @@ form.addEventListener('submit',ev=>{
   ev.preventDefault();
   phone.setCustomValidity(/^(?:0\d{9}|\+[1-9]\d{6,14}|00[1-9]\d{6,14})$/.test(normalizePhone(phone.value))?'':'Vul een geldig telefoonnummer in; buitenlandse nummers met landcode, bijv. +32 470 12 34 56.');
   [first,last].forEach(el=>el.setCustomValidity(clean(el.value)?'':'Vul dit veld in.'));
-  ffn.setCustomValidity(/^[A-Za-z0-9 -]{4,40}$/.test(clean(ffn.value))?'':'Vul je frequent-flyernummer in (alleen letters en cijfers). Nog geen? Maak gratis een account aan.');
+  ffn.setCustomValidity(!clean(ffn.value)||/^[A-Za-z0-9 -]{4,40}$/.test(clean(ffn.value))?'':'Een frequent-flyernummer bestaat alleen uit letters en cijfers.');
   if(!form.reportValidity())return;
   const d=Object.fromEntries(new FormData(form));
   const name=clean(d.firstName)+' '+clean(d.lastName);
   const body=['Beste secretaris,','','Ik meld me graag aan voor de lustrumreis van 29 april t/m 2 mei 2027.','',
     'Voornaam: '+clean(d.firstName),'Achternaam: '+clean(d.lastName),'Telefoonnummer: '+normalizePhone(clean(d.phone)),'E-mailadres: '+clean(d.email),
-    'Frequent-flyerprogramma: '+clean(d.ffProgram),'Frequent-flyernummer: '+clean(d.ffNumber),'Geboortedatum: '+(d.birthdate?d.birthdate.split('-').reverse().join('-'):''),
+    'Frequent-flyerprogramma: '+(clean(d.ffNumber)?(clean(d.ffProgram)||'-'):'-'),'Frequent-flyernummer: '+(clean(d.ffNumber)||'-'),'Geboortedatum: '+(d.birthdate?d.birthdate.split('-').reverse().join('-'):''),
     'Bagage: '+clean(d.bag),'Geldig paspoort/ID tot na 2 mei 2027: ja','Dieetwensen/opmerkingen: '+(clean(d.notes)||'-'),'Mijn gok voor de bestemming: '+(clean(d.guess)||'-'),
     '','Met vriendelijke groet,',name].join('\r\n');
   const url='mailto:secretaris@jovdhartvanbrabant.nl?subject='+encodeURIComponent('Aanmelding lustrumreis — '+name)+'&body='+encodeURIComponent(body);
